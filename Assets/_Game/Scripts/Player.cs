@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private LayerMask brickLayer;
+
+    private bool isRaycastHitBrick;
+
     private Rigidbody rb;
 
     private Vector2 startTouchPoint;
@@ -13,6 +18,8 @@ public class Player : MonoBehaviour
     private Direction currentDirection = Direction.None;
 
     private int brickCount = 0;
+
+    private int raycastHitCount = 0;
 
     public enum Direction
     {
@@ -32,8 +39,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.LogError("current direction:  " + currentDirection.ToString());
+        //Debug.LogError("current direction:  " + currentDirection.ToString());
 
+        //checkRaycast();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -51,29 +59,29 @@ public class Player : MonoBehaviour
             //rb.velocity = new Vector3(0f, 0f, 1.5f);
             if (Mathf.Abs(distance.x) > Mathf.Abs(distance.y))
             {
-                Debug.Log("vuot trai or phai !!!!!");
+                //Debug.Log("vuot trai or phai !!!!!");
                 if (currentMousePoint.x - startTouchPoint.x > 0)
                 {
-                    Debug.LogError("vuot sang phai!!!!!!");
+                    //Debug.LogError("vuot sang phai!!!!!!");
                     currentDirection = Direction.Right;
                 }
                 else
                 {
-                    Debug.LogError("vuot sang trai !!!!!");
+                    //Debug.LogError("vuot sang trai !!!!!");
                     currentDirection = Direction.Left;
                 }
             }
             else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
             {
-                Debug.Log("vuot len or xuong  !!!");
+                //Debug.Log("vuot len or xuong  !!!");
                 if (currentMousePoint.y - startTouchPoint.y > 0)
                 {
-                    Debug.LogError("vuot len tren !!!!");
+                    //Debug.LogError("vuot len tren !!!!");
                     currentDirection = Direction.Forward;
                 }
                 else
                 {
-                    Debug.LogError("vuot xuong duoi !!!!!");
+                    //Debug.LogError("vuot xuong duoi !!!!!");
                     currentDirection = Direction.Backward;
                 }
             }
@@ -114,6 +122,7 @@ public class Player : MonoBehaviour
     public void AddBrick()
     {
         brickCount++;
+        Debug.LogError("current brick count: " + brickCount);
     }
 
     public void RemoveBrick()
@@ -124,6 +133,19 @@ public class Player : MonoBehaviour
     public void ClearBrick()
     {
 
+    }
+
+    private void checkRaycast()
+    {
+        RaycastHit hit;
+        //Debug.DrawLine(transform.position, transform.position + Vector3.down * 1.1f, Color.red);
+        if (Physics.Raycast(transform.position, Vector3.down, out hit,5f, brickLayer)) 
+        {
+            //Debug.Log("raycast hit xDDDD");
+            //Debug.Log(hit.collider);
+            raycastHitCount++;
+            Debug.Log("raycastHit Count:   " + raycastHitCount);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
