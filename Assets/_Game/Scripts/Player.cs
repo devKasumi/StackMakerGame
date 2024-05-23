@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
 
     private Direction currentDirection = Direction.None;
 
+    private int brickCount = 0;
+
     public enum Direction
     {
         None,
@@ -111,7 +113,7 @@ public class Player : MonoBehaviour
 
     public void AddBrick()
     {
-
+        brickCount++;
     }
 
     public void RemoveBrick()
@@ -129,6 +131,11 @@ public class Player : MonoBehaviour
         if (other.CompareTag("Wall"))
         {
             rb.velocity = Vector3.zero;
+            currentDirection = Direction.None;
+        }
+        if (other.CompareTag("Brick"))
+        {
+            AddBrick();
         }
     }
 }
