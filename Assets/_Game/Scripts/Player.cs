@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private LayerMask brickLayer;
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask pivotLayer;
     [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
     [SerializeField] private Transform frontWall;
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform leftWall;
     [SerializeField] private Transform rightWall;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float maxDistance = 20f;
 
     private List<Brick> bricks = new List<Brick>();
 
@@ -33,7 +35,9 @@ public class Player : MonoBehaviour
 
     private bool isStopping = false;
 
-    private float maxDistance = 0f;
+    private Transform currentPivotPostion;
+
+    //private float storeMaxDistance = 0f;
 
     public enum Direction
     {
@@ -57,7 +61,7 @@ public class Player : MonoBehaviour
 
         //if (isStopping) return;
 
-        checkRaycast();
+        //checkRaycast();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -80,11 +84,14 @@ public class Player : MonoBehaviour
                 {
                     //Debug.LogError("vuot sang phai!!!!!!");
                     currentDirection = Direction.Right;
+                    //DirectionUsingRaycast(currentDirection);
                 }
                 else
                 {
                     //Debug.LogError("vuot sang trai !!!!!");
                     currentDirection = Direction.Left;
+                    //DirectionUsingRaycast(currentDirection);
+
                 }
             }
             else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
@@ -94,23 +101,80 @@ public class Player : MonoBehaviour
                 {
                     //Debug.LogError("vuot len tren !!!!");
                     currentDirection = Direction.Forward;
+                    //DirectionUsingRaycast(currentDirection);
+
                 }
                 else
                 {
                     //Debug.LogError("vuot xuong duoi !!!!!");
                     currentDirection = Direction.Backward;
+                    //DirectionUsingRaycast(currentDirection);
+
                 }
             }
         }
 
         //Control();
+        DirectionUsingRaycast(currentDirection);
+        if (currentPivotPostion)
+        {
+            Move(currentPivotPostion.position);
+        }
+
     }
 
-    
+
 
     public void OnInit()
     {
 
+    }
+
+    public void Move(Vector3 pivotPosition)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, pivotPosition, moveSpeed * Time.deltaTime);
+    }
+
+    public void DirectionUsingRaycast(Direction direction)
+    {
+        RaycastHit hit;
+
+        switch (direction)
+        {
+            case Direction.Forward:
+                if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, pivotLayer))
+                {
+                    //Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
+                    Debug.Log(hit.collider.transform.position);
+                    currentPivotPostion = hit.collider.transform;
+                    //Move(direction, hit.collider.transform.position);
+                }
+                break;
+            case Direction.Backward:
+                if (Physics.Raycast(transform.position, Vector3.back, out hit, maxDistance, pivotLayer))
+                {
+                    //Move(direction, hit.collider.transform.position);
+                    currentPivotPostion = hit.collider.transform;
+                }
+                break;
+            case Direction.Left:
+                if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance, pivotLayer))
+                {
+                    //Move(direction, hit.collider.transform.position);
+                    currentPivotPostion = hit.collider.transform;
+                }
+                break;
+            case Direction.Right:
+                if (Physics.Raycast(transform.position, Vector3.right, out hit, maxDistance, pivotLayer))
+                {
+                    //Move(direction, hit.collider.transform.position);
+                    currentPivotPostion = hit.collider.transform;
+                }
+                break;
+            default:
+                rb.velocity = Vector3.zero;
+                break;
+        }
     }
 
     public void Control()
@@ -120,10 +184,12 @@ public class Player : MonoBehaviour
             case Direction.Forward:
                 //rb.velocity = new Vector3(0f, 0f, 1.5f);
                 transform.position = Vector3.MoveTowards(transform.position, frontWall.position, moveSpeed*Time.deltaTime);
+                //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, storeMaxDistance), moveSpeed * Time.deltaTime);
                 break;
             case Direction.Backward:
                 //rb.velocity = new Vector3(0f, 0f, -1.5f);
                 transform.position = Vector3.MoveTowards(transform.position, backWall.position, moveSpeed * Time.deltaTime);
+                //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, storeMaxDistance), moveSpeed * Time.deltaTime);
                 break;
             case Direction.Right:
                 //rb.velocity = new Vector3(1.5f, 0f, 0f);
@@ -165,11 +231,9 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, wallLayer))
         {
             //Debug.Log("raycast hit xDDDD");
+            //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, maxDistance), moveSpeed * Time.deltaTime);
             Debug.Log(hit.collider.name);
-            //raycastHitCount++;
-            //Debug.Log("raycastHit Count:   " + raycastHitCount);
-            //rb.velocity = Vector3.zero;
-            //isStopping = true;
+            //storeMaxDistance = maxDistance;
             maxDistance = 0f;
             //currentDirection = Direction.Forward;
         }
@@ -178,22 +242,7 @@ public class Player : MonoBehaviour
             Debug.LogError("increase maxDistance:   " + maxDistance);
             maxDistance++;
         }
-        
-        //if (Physics.Raycast(transform.position, Vector3.forward, out hit, 5f, brickLayer))
-        //{
-
-        //}
-
-        //if (Physics.Raycast(transform.position, Vector3.left, out hit, 5f, brickLayer))
-        //{
-
-        //}
-    }
-
-    public void Move(Direction direction)
-    {
-
-    }
+    } 
 
     private void OnTriggerEnter(Collider other)
     {
