@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
 
     private Transform currentPivotPostion;
 
+    private List<Transform> pivots = new List<Transform>();
+
     //private float storeMaxDistance = 0f;
 
     public enum Direction
@@ -120,7 +122,11 @@ public class Player : MonoBehaviour
         {
             Move(currentPivotPostion.position);
         }
-
+        //if (pivots.Count > 0)
+        //{
+        //    Move(pivots[0].position);
+        //    pivots.Clear();
+        //}
     }
 
 
@@ -146,6 +152,7 @@ public class Player : MonoBehaviour
                 {
                     //Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
                     Debug.Log(hit.collider.transform.position);
+                    //pivots.Add(hit.collider.transform);
                     currentPivotPostion = hit.collider.transform;
                     //Move(direction, hit.collider.transform.position);
                 }
@@ -154,6 +161,8 @@ public class Player : MonoBehaviour
                 if (Physics.Raycast(transform.position, Vector3.back, out hit, maxDistance, pivotLayer))
                 {
                     //Move(direction, hit.collider.transform.position);
+                    //pivots.Add(hit.collider.transform);
+                    pivots.Add(hit.collider.transform);
                     currentPivotPostion = hit.collider.transform;
                 }
                 break;
@@ -161,6 +170,8 @@ public class Player : MonoBehaviour
                 if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance, pivotLayer))
                 {
                     //Move(direction, hit.collider.transform.position);
+                    //pivots.Add(hit.collider.transform);
+                    //pivots.Add(hit.collider.transform);
                     currentPivotPostion = hit.collider.transform;
                 }
                 break;
@@ -168,6 +179,8 @@ public class Player : MonoBehaviour
                 if (Physics.Raycast(transform.position, Vector3.right, out hit, maxDistance, pivotLayer))
                 {
                     //Move(direction, hit.collider.transform.position);
+                    //pivots.Add(hit.collider.transform);
+                    //pivots.Add(hit.collider.transform);
                     currentPivotPostion = hit.collider.transform;
                 }
                 break;
