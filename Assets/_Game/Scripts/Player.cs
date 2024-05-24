@@ -7,6 +7,12 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     [SerializeField] private LayerMask brickLayer;
+    [SerializeField] private Brick brick;
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform wall;
+    [SerializeField] private float moveSpeed;
+
+    private List<Brick> bricks = new List<Brick>();
 
     private bool isRaycastHitBrick;
 
@@ -102,7 +108,8 @@ public class Player : MonoBehaviour
         switch (currentDirection)
         {
             case Direction.Forward:
-                rb.velocity = new Vector3(0f, 0f, 1.5f);
+                //rb.velocity = new Vector3(0f, 0f, 1.5f);
+                transform.position = Vector3.MoveTowards(transform.position, wall.position, moveSpeed*Time.deltaTime);
                 break;
             case Direction.Backward:
                 rb.velocity = new Vector3(0f, 0f, -1.5f);
@@ -121,8 +128,9 @@ public class Player : MonoBehaviour
 
     public void AddBrick()
     {
-        brickCount++;
+        //brickCount++;
         Debug.LogError("current brick count: " + brickCount);
+        bricks.Add(Instantiate(brick, transform.position, transform.rotation));
     }
 
     public void RemoveBrick()
@@ -157,7 +165,16 @@ public class Player : MonoBehaviour
         }
         if (other.CompareTag("Brick"))
         {
-            AddBrick();
+            Vector3 newPos = player.position;
+            newPos.y += 0.5f;
+            player.position = newPos;
+            //AddBrick();
+            Transform t = other.transform;
+            gameObject.tag = "Untagged";
+            t.SetParent(this.transform);
+            t.localPosition = new Vector3(0, brickCount * 0.3f, 0);
+            //Destroy(other.gameObject);
+            brickCount++;
         }
     }
 }
