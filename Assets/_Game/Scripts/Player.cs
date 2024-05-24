@@ -7,9 +7,13 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     [SerializeField] private LayerMask brickLayer;
+    [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
-    [SerializeField] private Transform wall;
+    [SerializeField] private Transform frontWall;
+    [SerializeField] private Transform backWall;
+    [SerializeField] private Transform leftWall;
+    [SerializeField] private Transform rightWall;
     [SerializeField] private float moveSpeed;
 
     private List<Brick> bricks = new List<Brick>();
@@ -26,6 +30,10 @@ public class Player : MonoBehaviour
     private int brickCount = 0;
 
     private int raycastHitCount = 0;
+
+    private bool isStopping = false;
+
+    private float maxDistance = 0f;
 
     public enum Direction
     {
@@ -47,7 +55,9 @@ public class Player : MonoBehaviour
     {
         //Debug.LogError("current direction:  " + currentDirection.ToString());
 
-        //checkRaycast();
+        //if (isStopping) return;
+
+        checkRaycast();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -93,7 +103,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        Control();
+        //Control();
     }
 
     
@@ -109,16 +119,19 @@ public class Player : MonoBehaviour
         {
             case Direction.Forward:
                 //rb.velocity = new Vector3(0f, 0f, 1.5f);
-                transform.position = Vector3.MoveTowards(transform.position, wall.position, moveSpeed*Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, frontWall.position, moveSpeed*Time.deltaTime);
                 break;
             case Direction.Backward:
-                rb.velocity = new Vector3(0f, 0f, -1.5f);
+                //rb.velocity = new Vector3(0f, 0f, -1.5f);
+                transform.position = Vector3.MoveTowards(transform.position, backWall.position, moveSpeed * Time.deltaTime);
                 break;
             case Direction.Right:
-                rb.velocity = new Vector3(1.5f, 0f, 0f);
+                //rb.velocity = new Vector3(1.5f, 0f, 0f);
+                transform.position = Vector3.MoveTowards(transform.position, rightWall.position, moveSpeed * Time.deltaTime);
                 break;
             case Direction.Left:
-                rb.velocity = new Vector3(-1.5f, 0f, 0f);
+                //rb.velocity = new Vector3(-1.5f, 0f, 0f);
+                transform.position = Vector3.MoveTowards(transform.position, leftWall.position, moveSpeed * Time.deltaTime);
                 break;
             default:
                 rb.velocity = Vector3.zero;
@@ -146,14 +159,40 @@ public class Player : MonoBehaviour
     private void checkRaycast()
     {
         RaycastHit hit;
-        //Debug.DrawLine(transform.position, transform.position + Vector3.down * 1.1f, Color.red);
-        if (Physics.Raycast(transform.position, Vector3.down, out hit,5f, brickLayer)) 
+        //Debug.DrawRay(transform.position, Vector3.forward, Color.green);
+        //int maxDistance = 1;
+        Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
+        if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, wallLayer))
         {
             //Debug.Log("raycast hit xDDDD");
-            //Debug.Log(hit.collider);
-            raycastHitCount++;
-            Debug.Log("raycastHit Count:   " + raycastHitCount);
+            Debug.Log(hit.collider.name);
+            //raycastHitCount++;
+            //Debug.Log("raycastHit Count:   " + raycastHitCount);
+            //rb.velocity = Vector3.zero;
+            //isStopping = true;
+            maxDistance = 0f;
+            //currentDirection = Direction.Forward;
         }
+        else
+        {
+            Debug.LogError("increase maxDistance:   " + maxDistance);
+            maxDistance++;
+        }
+        
+        //if (Physics.Raycast(transform.position, Vector3.forward, out hit, 5f, brickLayer))
+        //{
+
+        //}
+
+        //if (Physics.Raycast(transform.position, Vector3.left, out hit, 5f, brickLayer))
+        //{
+
+        //}
+    }
+
+    public void Move(Direction direction)
+    {
+
     }
 
     private void OnTriggerEnter(Collider other)
