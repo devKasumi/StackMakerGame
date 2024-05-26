@@ -192,10 +192,6 @@ MonoBehaviour:
     m_Bits: 128
   brick: {fileID: 1661072757}
   player: {fileID: 1285533194}
-  frontWall: {fileID: 1085061628}
-  backWall: {fileID: 1301919780}
-  leftWall: {fileID: 641061955}
-  rightWall: {fileID: 322308164}
   moveSpeed: 10
   maxDistance: 20
 --- !u!136 &34213633

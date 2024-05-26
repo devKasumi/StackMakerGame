@@ -11,10 +11,10 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask pivotLayer;
     [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
-    [SerializeField] private Transform frontWall;
-    [SerializeField] private Transform backWall;
-    [SerializeField] private Transform leftWall;
-    [SerializeField] private Transform rightWall;
+    //[SerializeField] private Transform frontWall;
+    //[SerializeField] private Transform backWall;
+    //[SerializeField] private Transform leftWall;
+    //[SerializeField] private Transform rightWall;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxDistance = 0f;
 
@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
 
     //private float storeMaxDistance = 0f;
 
+    private Vector3 raycastPosition;
+
     public enum Direction
     {
         None,
@@ -56,6 +58,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        //raycastPosition = new Vector3(transform)
     }
 
     // Update is called once per frame
@@ -143,7 +146,7 @@ public class Player : MonoBehaviour
     public void Move(Vector3 pivotPosition)
     {
         transform.position = Vector3.MoveTowards(transform.position, pivotPosition, moveSpeed * Time.deltaTime);
-        isMoving = true;    
+        //isMoving = true;    
     }
 
     public bool DetectWall(Direction direction)
@@ -165,13 +168,33 @@ public class Player : MonoBehaviour
         }
     }
 
+    //public void CheckBrickRaycast(Direction direction)
+    //{
+    //    RaycastHit hit;
+
+    //    switch (direction)
+    //    {
+    //        case Direction.Forward:
+    //            if (Physics.Raycast(transform.position.y))
+    //        case Direction.Backward:
+    //        case Direction.Left:
+    //        case Direction.Right:
+    //        default:
+    //            break;
+    //    }
+    //}
+
     public void DirectionUsingRaycast(Direction direction)
     {
         RaycastHit hit;
 
         Debug.Log("is detect wall: " + DetectWall(direction) + " with current direction:  " + currentDirection );
 
-        if (DetectWall(currentDirection)) return;
+        //if (DetectWall(currentDirection))
+        //{
+        //    //currentDirection = Direction.None;
+        //    return;
+        //}
 
 
         switch (direction)
@@ -179,7 +202,7 @@ public class Player : MonoBehaviour
             case Direction.Forward:
                 if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, pivotLayer))
                 {
-                    //Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
+                    //Debug.DrawLine(new Vector3(transform.position.x, 0f, transform.position.z), transform.position + Vector3.forward * maxDistance, Color.red);
                     //Debug.Log(hit.collider.transform.position);
                     //pivots.Add(hit.collider.transform);
                     currentPivotPostion = hit.collider.transform;
@@ -216,33 +239,33 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Control()
-    {
-        switch (currentDirection)
-        {
-            case Direction.Forward:
-                //rb.velocity = new Vector3(0f, 0f, 1.5f);
-                transform.position = Vector3.MoveTowards(transform.position, frontWall.position, moveSpeed*Time.deltaTime);
-                //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, storeMaxDistance), moveSpeed * Time.deltaTime);
-                break;
-            case Direction.Backward:
-                //rb.velocity = new Vector3(0f, 0f, -1.5f);
-                transform.position = Vector3.MoveTowards(transform.position, backWall.position, moveSpeed * Time.deltaTime);
-                //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, storeMaxDistance), moveSpeed * Time.deltaTime);
-                break;
-            case Direction.Right:
-                //rb.velocity = new Vector3(1.5f, 0f, 0f);
-                transform.position = Vector3.MoveTowards(transform.position, rightWall.position, moveSpeed * Time.deltaTime);
-                break;
-            case Direction.Left:
-                //rb.velocity = new Vector3(-1.5f, 0f, 0f);
-                transform.position = Vector3.MoveTowards(transform.position, leftWall.position, moveSpeed * Time.deltaTime);
-                break;
-            default:
-                rb.velocity = Vector3.zero;
-                break;
-        }
-    }
+    //public void Control()
+    //{
+    //    switch (currentDirection)
+    //    {
+    //        case Direction.Forward:
+    //            //rb.velocity = new Vector3(0f, 0f, 1.5f);
+    //            transform.position = Vector3.MoveTowards(transform.position, frontWall.position, moveSpeed*Time.deltaTime);
+    //            //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, storeMaxDistance), moveSpeed * Time.deltaTime);
+    //            break;
+    //        case Direction.Backward:
+    //            //rb.velocity = new Vector3(0f, 0f, -1.5f);
+    //            transform.position = Vector3.MoveTowards(transform.position, backWall.position, moveSpeed * Time.deltaTime);
+    //            //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, storeMaxDistance), moveSpeed * Time.deltaTime);
+    //            break;
+    //        case Direction.Right:
+    //            //rb.velocity = new Vector3(1.5f, 0f, 0f);
+    //            transform.position = Vector3.MoveTowards(transform.position, rightWall.position, moveSpeed * Time.deltaTime);
+    //            break;
+    //        case Direction.Left:
+    //            //rb.velocity = new Vector3(-1.5f, 0f, 0f);
+    //            transform.position = Vector3.MoveTowards(transform.position, leftWall.position, moveSpeed * Time.deltaTime);
+    //            break;
+    //        default:
+    //            rb.velocity = Vector3.zero;
+    //            break;
+    //    }
+    //}
 
     public void AddBrick()
     {
@@ -261,27 +284,27 @@ public class Player : MonoBehaviour
 
     }
 
-    private void checkRaycast()
-    {
-        RaycastHit hit;
-        //Debug.DrawRay(transform.position, Vector3.forward, Color.green);
-        //int maxDistance = 1;
-        Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
-        if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, wallLayer))
-        {
-            //Debug.Log("raycast hit xDDDD");
-            //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, maxDistance), moveSpeed * Time.deltaTime);
-            Debug.Log(hit.collider.name);
-            //storeMaxDistance = maxDistance;
-            maxDistance = 0f;
-            //currentDirection = Direction.Forward;
-        }
-        else
-        {
-            Debug.LogError("increase maxDistance:   " + maxDistance);
-            maxDistance++;
-        }
-    } 
+    //private void checkRaycast()
+    //{
+    //    RaycastHit hit;
+    //    //Debug.DrawRay(transform.position, Vector3.forward, Color.green);
+    //    //int maxDistance = 1;
+    //    Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
+    //    if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, wallLayer))
+    //    {
+    //        //Debug.Log("raycast hit xDDDD");
+    //        //transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, maxDistance), moveSpeed * Time.deltaTime);
+    //        Debug.Log(hit.collider.name);
+    //        //storeMaxDistance = maxDistance;
+    //        maxDistance = 0f;
+    //        //currentDirection = Direction.Forward;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("increase maxDistance:   " + maxDistance);
+    //        maxDistance++;
+    //    }
+    //} 
 
     private void OnTriggerEnter(Collider other)
     {
