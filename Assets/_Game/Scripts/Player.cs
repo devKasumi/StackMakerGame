@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxDistance = 100f;
     [SerializeField] private float maxDistanceForBrick = 5f;
-    [SerializeField] private float maxDistanceForWall = 5f;
+    [SerializeField] private float maxDistanceForWall = 2f;
 
     private List<Brick> bricks = new List<Brick>();
 
@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        //currentPivotPostion.position = transform.position;
         //listBricks = new List<Transform>(); 
         //raycastPosition = new Vector3(transform)
     }
@@ -86,6 +87,8 @@ public class Player : MonoBehaviour
         //}
 
         //Debug.LogError("max distance: " + maxDistance);
+
+        Debug.Log("current velocity:  " + rb.velocity);
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -109,7 +112,6 @@ public class Player : MonoBehaviour
                     //Debug.LogError("vuot sang phai!!!!!!");
                     currentDirection = Direction.Right;
                     //maxDistance = 20f;
-                    DirectionUsingRaycast(currentDirection);
                     //RaycastOnBrick(currentDirection);
 
 
@@ -119,12 +121,11 @@ public class Player : MonoBehaviour
                     //Debug.LogError("vuot sang trai !!!!!");
                     currentDirection = Direction.Left;
                     //maxDistance = 20f;
-                    DirectionUsingRaycast(currentDirection);
                     //RaycastOnBrick(currentDirection);
 
 
                 }
-                isMoving = true;
+                //isMoving = true;
             }
             else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
             {
@@ -135,7 +136,6 @@ public class Player : MonoBehaviour
                     Debug.LogError("current direction: forward");
                     currentDirection = Direction.Forward;
                     //maxDistance = 20f;
-                    DirectionUsingRaycast(currentDirection);
                     //RaycastOnBrick(currentDirection);
                 }
                 else
@@ -143,11 +143,16 @@ public class Player : MonoBehaviour
                     //Debug.LogError("vuot xuong duoi !!!!!");
                     currentDirection = Direction.Backward;
                     //maxDistance = 20f;
-                    DirectionUsingRaycast(currentDirection);
                     //RaycastOnBrick(currentDirection);
 
                 }
-                isMoving = true;
+                //isMoving = true;
+            }
+
+            if (rb.velocity == Vector3.zero)
+            {
+                DirectionUsingRaycast(currentDirection);
+
             }
 
             if (DetectWall(currentDirection))
@@ -155,12 +160,17 @@ public class Player : MonoBehaviour
                 Debug.Log("detect wall!!!");
                 currentPivotPostion = null;
                 //currentDirection = Direction.None;
-                isMoving = false;
+                isMoving = true;
                 return;
             }
-            isMoving = true;
-            isFinishingDetect = false;
+            else isMoving = false;
+
+            //isMoving = true;
+            //isFinishingDetect = false;
         }
+
+        
+
 
         //if (currentDirection != Direction.None)
         //{
@@ -172,7 +182,7 @@ public class Player : MonoBehaviour
 
 
         //Control();
-        if (currentPivotPostion && isMoving)
+        if (currentPivotPostion)
         {
             Move(currentPivotPostion.position);
         }
@@ -219,8 +229,8 @@ public class Player : MonoBehaviour
     public void Move(Vector3 pivotPosition)
     {
         transform.position = Vector3.MoveTowards(transform.position, pivotPosition, moveSpeed * Time.deltaTime);
-        //isMoving = true;    
-
+        //isMoving = true;
+        isMoving = false;
     }
 
     public void MoveToBrick(Vector3 brickPosition)
@@ -444,7 +454,7 @@ public class Player : MonoBehaviour
                 }
                 break;
             default:
-                rb.velocity = Vector3.zero;
+                //rb.velocity = Vector3.zero;
                 break;
         }
     }
@@ -518,11 +528,11 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Wall"))
-        {
-            rb.velocity = Vector3.zero;
-            currentDirection = Direction.None;
-        }
+        //if (other.CompareTag("Wall"))
+        //{
+        //    rb.velocity = Vector3.zero;
+        //    currentDirection = Direction.None;
+        //}
         if (other.CompareTag("Brick"))
         {
             Vector3 newPos = player.position;
