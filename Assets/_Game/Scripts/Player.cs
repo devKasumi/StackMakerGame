@@ -14,6 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
     [SerializeField] private float moveSpeed;
+
+    [SerializeField] private float originPlayerImagePos;
+    [SerializeField] private float firstBrickPosition;
     private float maxDistance = Mathf.Infinity;
 
     private int axisDistance = 2;
@@ -28,9 +31,7 @@ public class Player : MonoBehaviour
 
     private Direction currentDirection = Direction.None;
 
-    private int brickCount = 0;
-
-    private List<Transform> listBricks = new List<Transform>();
+    [SerializeField] private bool isStoping;
 
     public enum Direction
     {
@@ -53,10 +54,19 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ControlPlayerMovement();
+    }
 
+    public void OnInit()
+    {
+
+    }
+
+    public void ControlPlayerMovement()
+    {
         if (Input.GetMouseButtonDown(0))
         {
-            startTouchPoint = Input.mousePosition;   
+            startTouchPoint = Input.mousePosition;
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -109,22 +119,10 @@ public class Player : MonoBehaviour
         }
     }
 
-
-
-    public void OnInit()
-    {
-
-    }
-
     public void Move(Vector3 pivotPosition)
     {
+        Debug.Log("movinggggg");
         transform.position = Vector3.MoveTowards(transform.position, pivotPosition, moveSpeed * Time.deltaTime);
-    }
-
-    public void MoveToBrick(Vector3 brickPosition)
-    {
-        transform.position = Vector3.MoveTowards(transform.position, brickPosition, moveSpeed * Time.deltaTime);
-
     }
 
     public void DirectionUsingRaycast(Direction direction)
@@ -174,11 +172,53 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void AddBrick()
+    public void AddBrick(Brick brick)
     {
         //brickCount++;
         //Debug.LogError("current brick count: " + brickCount);
-        bricks.Add(Instantiate(brick, transform.position, transform.rotation));
+        //bricks.Add(Instantiate(brick, transform.position, transform.rotation));
+        bricks.Add(brick);
+        StackBrick();
+    }
+
+    public void StackBrick()
+    {
+        //if (bricks.Count > 0)
+        //{
+        //    for (int i = 0; i < bricks.Count; i++)
+        //    {
+        //        Vector3 newPos = player.position;
+        //        Transform brickTransform = bricks[i].transform;
+        //        brickTransform.SetParent(this.transform);
+        //        if (i == 0)
+        //        {
+        //            newPos.y = originPlayerImagePos;
+        //            brickTransform.localPosition = new Vector3(0f, firstBrickPosition, 0f);
+        //        }
+        //        else
+        //        {
+        //            newPos.y += 0.3f;
+        //            brickTransform.localPosition = new Vector3(0f, firstBrickPosition + i * 0.3f, 0f);
+        //        }
+        //        player.position = newPos;
+        //    }
+        //}
+
+        Vector3 newPos = player.position;
+        Transform brickTransform = bricks[bricks.Count - 1].transform;
+        brickTransform.SetParent(this.transform);
+        if (bricks.Count == 1)
+        {
+            newPos.y = originPlayerImagePos;
+            brickTransform.localPosition = new Vector3(0f, firstBrickPosition, 0f);
+        }
+        else
+        {
+            newPos.y += 0.3f;
+            brickTransform.localPosition = new Vector3(0f, firstBrickPosition + (bricks.Count - 1) * 0.3f, 0f);
+        }
+        player.position = newPos;
+
     }
 
     public void RemoveBrick()
@@ -194,18 +234,6 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Brick"))
-        {
-            Vector3 newPos = player.position;
-            newPos.y += 0.5f;
-            player.position = newPos;
-            //AddBrick();
-            Transform t = other.transform;
-            gameObject.tag = "Untagged";
-            t.SetParent(this.transform);
-            t.localPosition = new Vector3(0, brickCount * 0.3f, 0);
-            //Destroy(other.gameObject);
-            brickCount++;
-        }
+        
     }
 }

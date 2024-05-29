@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Brick
   - Wall
+  - BridgeBrick
   layers:
   - Default
   - TransparentFX
