@@ -15,10 +15,10 @@ TagManager:
   - UI
   - Wall
   - Pivot
-  - 
-  - 
-  - 
-  - 
+  - TopPivot
+  - BackPivot
+  - LeftPivot
+  - RightPivot
   - 
   - 
   - 
