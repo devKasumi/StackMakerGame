@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float originPlayerImagePos;
     [SerializeField] private float firstBrickPosition;
+
+    [SerializeField] private GameObject bridge;
     private float maxDistance = Mathf.Infinity;
 
     private int axisDistance = 2;
@@ -31,7 +33,7 @@ public class Player : MonoBehaviour
 
     private Direction currentDirection = Direction.None;
 
-    [SerializeField] private bool isStoping;
+    //[SerializeField] private bool isStoping;
 
     public enum Direction
     {
@@ -75,7 +77,7 @@ public class Player : MonoBehaviour
             {
                 if (Vector3.Distance(transform.position, currentTargetPosition) < 0.02f)
                 {
-                    Debug.Log("reach pivot position !!!");
+                    //Debug.Log("reach pivot position !!!");
                 }
                 else return;
             }
@@ -121,7 +123,7 @@ public class Player : MonoBehaviour
 
     public void Move(Vector3 pivotPosition)
     {
-        Debug.Log("movinggggg");
+        //Debug.Log("movinggggg");
         transform.position = Vector3.MoveTowards(transform.position, pivotPosition, moveSpeed * Time.deltaTime);
     }
 
@@ -136,16 +138,16 @@ public class Player : MonoBehaviour
             case Direction.Forward:
                 if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, pivotLayer))
                 {
-                    Debug.Log("pokemon xDDDD");
+                    //Debug.Log("pokemon xDDDD");
                     Transform hitCollider = hit.collider.transform;
                     currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z - axisDistance);
                 }
                 break;
             case Direction.Backward:
-                Debug.Log("chelsea");
+                //Debug.Log("chelsea");
                 if (Physics.Raycast(transform.position, Vector3.back, out hit, maxDistance, pivotLayer))
                 {
-                    Debug.Log("backkkkk");
+                    //Debug.Log("backkkkk");
                     //currentPivotPostion = hit.collider.transform;
                     Transform hitCollider = hit.collider.transform;
                     currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z + axisDistance);
@@ -174,36 +176,12 @@ public class Player : MonoBehaviour
 
     public void AddBrick(Brick brick)
     {
-        //brickCount++;
-        //Debug.LogError("current brick count: " + brickCount);
-        //bricks.Add(Instantiate(brick, transform.position, transform.rotation));
         bricks.Add(brick);
         StackBrick();
     }
 
     public void StackBrick()
     {
-        //if (bricks.Count > 0)
-        //{
-        //    for (int i = 0; i < bricks.Count; i++)
-        //    {
-        //        Vector3 newPos = player.position;
-        //        Transform brickTransform = bricks[i].transform;
-        //        brickTransform.SetParent(this.transform);
-        //        if (i == 0)
-        //        {
-        //            newPos.y = originPlayerImagePos;
-        //            brickTransform.localPosition = new Vector3(0f, firstBrickPosition, 0f);
-        //        }
-        //        else
-        //        {
-        //            newPos.y += 0.3f;
-        //            brickTransform.localPosition = new Vector3(0f, firstBrickPosition + i * 0.3f, 0f);
-        //        }
-        //        player.position = newPos;
-        //    }
-        //}
-
         Vector3 newPos = player.position;
         Transform brickTransform = bricks[bricks.Count - 1].transform;
         brickTransform.SetParent(this.transform);
@@ -223,12 +201,35 @@ public class Player : MonoBehaviour
 
     public void RemoveBrick()
     {
+        if (bricks.Count > 0)
+        {
+            Debug.Log(bricks[bricks.Count - 1].gameObject.name.ToString());
+            Brick currentBrick = bricks[bricks.Count - 1];
+            bricks.Remove(currentBrick);
+            currentBrick.transform.parent = null;
+            Destroy(currentBrick.gameObject);
+            Debug.LogError("count:  " + bricks.Count);
+            Vector3 newPos = player.position;
+            newPos.y -= 0.3f;
+            player.position = newPos;
+        } 
+    }
 
+    public int GetListBrickCount()
+    {
+        return bricks.Count;
+    }
+
+    public void StopMoving(Brick brick)
+    {
+        Vector3 newPos = brick.transform.position;
+        newPos.y += 1f;
+        currentTargetPosition = newPos;
     }
 
     public void ClearBrick()
     {
-
+        
     }
 
 

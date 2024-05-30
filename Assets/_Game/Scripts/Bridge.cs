@@ -4,24 +4,17 @@ using UnityEngine;
 
 public class Bridge : MonoBehaviour
 {
-    private List<Brick> bricks = new List<Brick>();
+    [SerializeField] private Brick[] bricks;
 
-    // Start is called before the first frame update
-    void Start()
+    private List<Brick> currentBricksList = new List<Brick>();
+
+    public void AddBrick(Brick brick)
     {
-        
+        currentBricksList.Add(brick);
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool NotEnoughBrick()
     {
-        
+        return currentBricksList.Count < bricks.Length;
     }
-
-    public void AddBrick()
-    {
-
-    }
-
-    
 }
