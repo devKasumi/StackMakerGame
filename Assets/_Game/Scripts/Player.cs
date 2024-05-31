@@ -61,7 +61,14 @@ public class Player : MonoBehaviour
 
     public void OnInit()
     {
+        currentDirection = Direction.None;
+        currentTargetPosition = Vector3.zero;
+        bricks = new List<Brick>();
+    }
 
+    public void OnDespawn()
+    {
+        OnInit();
     }
 
     public void ControlPlayerMovement()

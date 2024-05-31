@@ -29,7 +29,6 @@ public class Brick : MonoBehaviour
                     brickMeshRenderer.enabled = true;
                     player.RemoveBrick();
                     bridge.AddBrick(this.gameObject.GetComponent<Brick>());
-                    //GameObject.FindGameObjectWithTag("BridgeBrick").GetComponent<Bridge>().AddBrick();
                     if (bridge.NotEnoughBrick() && player.GetListBrickCount() == 0)
                     {
                         player.StopMoving(this.gameObject.GetComponent<Brick>());
