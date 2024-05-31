@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
         //currentPivotPostion.position = transform.position;
         //listBricks = new List<Transform>(); 
         //raycastPosition = new Vector3(transform)
+        OnInit();
     }
 
     // Update is called once per frame
@@ -210,13 +211,9 @@ public class Player : MonoBehaviour
     {
         if (bricks.Count > 0)
         {
-            //Debug.Log(bricks[bricks.Count - 1].gameObject.name.ToString());
-            //bricks.Remove(currentBrick);
-            //Destroy(currentBrick.gameObject);
             Brick currentBrick = bricks[bricks.Count - 1];
             DestroyBrick(currentBrick);
             currentBrick.transform.parent = null;
-            //Debug.LogError("count:  " + bricks.Count);
             Vector3 newPos = player.position;
             newPos.y -= 0.3f;
             player.position = newPos;
@@ -241,9 +238,6 @@ public class Player : MonoBehaviour
         {
             for (int i = bricks.Count - 1; i >= 0; i--)
             {
-                //Brick brick = bricks[i];
-                //bricks.Remove(brick);
-                //Destroy(brick.gameObject);  
                 DestroyBrick(bricks[i]);
             }
         }
