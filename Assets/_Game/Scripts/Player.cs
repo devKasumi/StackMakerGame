@@ -210,12 +210,13 @@ public class Player : MonoBehaviour
     {
         if (bricks.Count > 0)
         {
-            Debug.Log(bricks[bricks.Count - 1].gameObject.name.ToString());
+            //Debug.Log(bricks[bricks.Count - 1].gameObject.name.ToString());
+            //bricks.Remove(currentBrick);
+            //Destroy(currentBrick.gameObject);
             Brick currentBrick = bricks[bricks.Count - 1];
-            bricks.Remove(currentBrick);
+            DestroyBrick(currentBrick);
             currentBrick.transform.parent = null;
-            Destroy(currentBrick.gameObject);
-            Debug.LogError("count:  " + bricks.Count);
+            //Debug.LogError("count:  " + bricks.Count);
             Vector3 newPos = player.position;
             newPos.y -= 0.3f;
             player.position = newPos;
@@ -236,7 +237,23 @@ public class Player : MonoBehaviour
 
     public void ClearBrick()
     {
-        
+        if (bricks.Count > 0)
+        {
+            for (int i = bricks.Count - 1; i >= 0; i--)
+            {
+                //Brick brick = bricks[i];
+                //bricks.Remove(brick);
+                //Destroy(brick.gameObject);  
+                DestroyBrick(bricks[i]);
+            }
+        }
+        bricks.Clear(); 
+    }
+
+    void DestroyBrick(Brick brick)
+    {
+        bricks.Remove(brick);
+        Destroy(brick.gameObject);
     }
 
 

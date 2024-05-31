@@ -24,7 +24,9 @@ public class FinishBox : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("finish level!!!!!!!!");
-            LevelManager.GetInstance.LoadLevel(0);
+            other.GetComponent<Player>().ClearBrick();
+            other.GetComponent<Player>().OnInit();
+            LevelManager.GetInstance.Victory();
         }
     }
 }
