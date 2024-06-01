@@ -354,10 +354,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level_3
       objectReference: {fileID: 0}
-    - target: {fileID: 4385004327499562699, guid: af3c3d32b6e9b3b4b9b5dad42465a38a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
