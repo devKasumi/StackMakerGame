@@ -37,14 +37,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log("init level manager");
         playerPosition = player.transform.position;
         currentLevelIndex = 0;
-        LoadLevel(currentLevelIndex);
-    }
-
-    public void LoadLevel(int levelIndex)
-    {
-        currentLevel = Instantiate(levelPrefabs[levelIndex]);
-        currentLevel.GetComponent<Transform>().position = playerPosition;
-        currentLevel.gameObject.SetActive(true);
+        InitLevel(currentLevelIndex);
     }
 
     public void OnDespawn()
@@ -52,16 +45,27 @@ public class LevelManager : MonoBehaviour
         OnInit();
     }
 
-    public void Victory()
+    public void InitLevel(int levelIndex)
     {
-        Debug.Log("finish levelllasdlasd");
-        Destroy(currentLevel.gameObject);
-        currentLevelIndex++; 
-        LoadLevel(currentLevelIndex);
+        currentLevel = Instantiate(levelPrefabs[levelIndex]);
+        currentLevel.GetComponent<Transform>().position = playerPosition;
+        currentLevel.gameObject.SetActive(true);
     }
 
-    public void Lose()
+    public void ReplayCurrentLevel()
     {
+        LoadLevel();    
+    }
 
+    public void LoadNextLevel()
+    {
+        currentLevelIndex++;
+        LoadLevel();
+    }
+
+    public void LoadLevel()
+    {
+        Destroy(currentLevel.gameObject);
+        InitLevel(currentLevelIndex);
     }
 }

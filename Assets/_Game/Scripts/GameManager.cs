@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     private IGameState gameState;
 
+    [SerializeField] private Player player;
+
     public static GameManager GetInstance
     {
         get
@@ -22,13 +24,24 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void RestartLevel()
+    public void ReplayLevel()
     {
-
+        LevelManager.GetInstance.ReplayCurrentLevel();
+        UIManager.GetInstance.DisableUI();
+        player.OnDespawn();
     }
 
     public void LoadNextLevel()
     {
+        LevelManager.GetInstance.LoadNextLevel();
+        UIManager.GetInstance.DisableUI();
+        player.OnDespawn();
+    }
 
+    public void RestartGame()
+    {
+        LevelManager.GetInstance.OnDespawn();
+        UIManager.GetInstance.DisableUI();
+        player.OnDespawn();
     }
 }

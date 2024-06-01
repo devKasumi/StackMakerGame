@@ -5,7 +5,6 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     [SerializeField] private bool isBridgeBrick;
-    //[SerializeField] private GameObject bridge;
 
     private MeshRenderer brickMeshRenderer;
 
@@ -25,13 +24,13 @@ public class Brick : MonoBehaviour
                 Bridge bridge = GameObject.FindGameObjectWithTag("BridgeBrick").GetComponent<Bridge>();
                 if (!brickMeshRenderer.enabled)
                 {
-                    Debug.Log("check bridge brick!!!!");
                     brickMeshRenderer.enabled = true;
                     player.RemoveBrick();
                     bridge.AddBrick(this.gameObject.GetComponent<Brick>());
                     if (bridge.NotEnoughBrick() && player.GetListBrickCount() == 0)
                     {
                         player.StopMoving(this.gameObject.GetComponent<Brick>());
+                        UIManager.GetInstance.ShowLoseUI();
                     }
                 }
             }

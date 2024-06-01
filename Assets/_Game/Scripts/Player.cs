@@ -8,32 +8,21 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    //[SerializeField] private LayerMask brickLayer;
-    //[SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask pivotLayer;
     [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
     [SerializeField] private float moveSpeed;
-
     [SerializeField] private float originPlayerImagePos;
     [SerializeField] private float firstBrickPosition;
 
-    [SerializeField] private GameObject bridge;
+    private Vector3 originalPosition = Vector3.zero;
     private float maxDistance = Mathf.Infinity;
-
     private int axisDistance = 2;
-
     private Vector3 currentTargetPosition;
-
     private List<Brick> bricks = new List<Brick>();
-
     private Rigidbody rb;
-
     private Vector2 startTouchPoint;
-
     private Direction currentDirection = Direction.None;
-
-    //[SerializeField] private bool isStoping;
 
     public enum Direction
     {
@@ -59,6 +48,8 @@ public class Player : MonoBehaviour
 
     public void OnInit()
     {
+        gameObject.transform.position = originalPosition;
+        player.position = originalPosition;
         currentDirection = Direction.None;
         currentTargetPosition = Vector3.zero;
         bricks = new List<Brick>();
@@ -66,6 +57,7 @@ public class Player : MonoBehaviour
 
     public void OnDespawn()
     {
+        ClearBrick();
         OnInit();
     }
 
@@ -113,8 +105,6 @@ public class Player : MonoBehaviour
                 }
             }
 
-            Debug.Log(currentDirection.ToString());
-
             DirectionUsingRaycast(currentDirection);
 
         }
@@ -133,8 +123,6 @@ public class Player : MonoBehaviour
     public void DirectionUsingRaycast(Direction direction)
     {
         RaycastHit hit;
-
-        //Debug.DrawLine(transform.position, transform.position + Vector3.forward * maxDistance, Color.red);
 
         switch (direction)
         {
@@ -237,11 +225,5 @@ public class Player : MonoBehaviour
     {
         bricks.Remove(brick);
         Destroy(brick.gameObject);
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        
     }
 }
