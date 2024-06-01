@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private Canvas victoryCanvas;
+
     private static UIManager instance;
 
     public static UIManager GetInstance
@@ -19,20 +21,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnInit()
+    public void ShowVictoryUI()
     {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        victoryCanvas.gameObject.SetActive(true);
     }
 }

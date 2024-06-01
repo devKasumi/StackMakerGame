@@ -21,24 +21,14 @@ public class GameManager : MonoBehaviour
         }        
     }
 
-    //private void Start()
-    //{
-    //    OnInit();
-    //}
 
-    //public void OnInit()
-    //{
-    //    LevelManager.GetInstance.OnInit();
-    //    UIManager.GetInstance.OnInit();
-    //}
+    public void RestartLevel()
+    {
 
-    //public void RestartLevel()
-    //{
+    }
 
-    //}
+    public void LoadNextLevel()
+    {
 
-    //public void LoadNextLevel()
-    //{
-
-    //}
+    }
 }

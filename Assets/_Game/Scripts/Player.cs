@@ -48,9 +48,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //currentPivotPostion.position = transform.position;
-        //listBricks = new List<Transform>(); 
-        //raycastPosition = new Vector3(transform)
         OnInit();
     }
 
@@ -85,7 +82,7 @@ public class Player : MonoBehaviour
             {
                 if (Vector3.Distance(transform.position, currentTargetPosition) < 0.02f)
                 {
-                    //Debug.Log("reach pivot position !!!");
+                    Debug.Log("reach pivot position !!!");
                 }
                 else return;
             }
@@ -106,7 +103,6 @@ public class Player : MonoBehaviour
             }
             else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
             {
-                //Debug.Log("vuot len or xuong  !!!");
                 if (currentMousePoint.y - startTouchPoint.y > 0)
                 {
                     currentDirection = Direction.Forward;
@@ -131,7 +127,6 @@ public class Player : MonoBehaviour
 
     public void Move(Vector3 pivotPosition)
     {
-        //Debug.Log("movinggggg");
         transform.position = Vector3.MoveTowards(transform.position, pivotPosition, moveSpeed * Time.deltaTime);
     }
 
@@ -146,17 +141,13 @@ public class Player : MonoBehaviour
             case Direction.Forward:
                 if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, pivotLayer))
                 {
-                    //Debug.Log("pokemon xDDDD");
                     Transform hitCollider = hit.collider.transform;
                     currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z - axisDistance);
                 }
                 break;
             case Direction.Backward:
-                //Debug.Log("chelsea");
                 if (Physics.Raycast(transform.position, Vector3.back, out hit, maxDistance, pivotLayer))
                 {
-                    //Debug.Log("backkkkk");
-                    //currentPivotPostion = hit.collider.transform;
                     Transform hitCollider = hit.collider.transform;
                     currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z + axisDistance);
                 }
@@ -164,7 +155,6 @@ public class Player : MonoBehaviour
             case Direction.Left:
                 if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance, pivotLayer))
                 {
-                    //currentPivotPostion = hit.collider.transform;
                     Transform hitCollider = hit.collider.transform;
                     currentTargetPosition = new Vector3(hitCollider.position.x + axisDistance, hitCollider.position.y, hitCollider.position.z);
                 }
@@ -177,7 +167,6 @@ public class Player : MonoBehaviour
                 }
                 break;
             default:
-                //rb.velocity = Vector3.zero;
                 break;
         }
     }
