@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    private const float CONST_MAXDISTANCE = Mathf.Infinity;
+    private const int CONST_AXISDISTANCE = 2;
+
     [SerializeField] private LayerMask pivotLayer;
     [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
@@ -15,14 +18,16 @@ public class Player : MonoBehaviour
     [SerializeField] private float originPlayerImagePos;
     [SerializeField] private float firstBrickPosition;
 
-    private Vector3 originalPosition = Vector3.zero;
-    private float maxDistance = Mathf.Infinity;
-    private int axisDistance = 2;
-    private Vector3 currentTargetPosition;
     private List<Brick> bricks = new List<Brick>();
-    private Rigidbody rb;
+    private Quaternion forwardRotation = Quaternion.Euler(0f, -150f, 0f);
+    private Quaternion backwardRotation = Quaternion.Euler(0f, 30f, 0f);
+    private Quaternion leftRotation = Quaternion.Euler(0f, -240f, 0f);
+    private Quaternion rightRotation = Quaternion.Euler(0f, -60f, 0f);
+    private Vector3 originalPosition = Vector3.zero;
+    private Vector3 currentTargetPosition;
     private Vector2 startTouchPoint;
     private Direction currentDirection = Direction.None;
+    private bool isFinishingLevel = false;
 
     public enum Direction
     {
@@ -36,22 +41,24 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
         OnInit();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isFinishingLevel) return;
         ControlPlayerMovement();
     }
 
     public void OnInit()
     {
-        gameObject.transform.position = originalPosition;
+        transform.position = originalPosition;
         player.position = originalPosition;
+        player.rotation = forwardRotation;
         currentDirection = Direction.None;
         currentTargetPosition = Vector3.zero;
+        isFinishingLevel = false;
         bricks = new List<Brick>();
     }
 
@@ -79,6 +86,8 @@ public class Player : MonoBehaviour
                 else return;
             }
 
+            Debug.Log("switch direction !!!");
+
             Vector2 currentMousePoint = Input.mousePosition;
             Vector2 distance = currentMousePoint - startTouchPoint;
 
@@ -87,10 +96,12 @@ public class Player : MonoBehaviour
                 if (currentMousePoint.x - startTouchPoint.x > 0)
                 {
                     currentDirection = Direction.Right;
+                    player.rotation = rightRotation;
                 }
                 else
                 {
                     currentDirection = Direction.Left;
+                    player.rotation = leftRotation;
                 }
             }
             else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
@@ -98,10 +109,12 @@ public class Player : MonoBehaviour
                 if (currentMousePoint.y - startTouchPoint.y > 0)
                 {
                     currentDirection = Direction.Forward;
+                    player.rotation = forwardRotation;
                 }
                 else
                 {
                     currentDirection = Direction.Backward;
+                    player.rotation = backwardRotation;
                 }
             }
 
@@ -127,31 +140,31 @@ public class Player : MonoBehaviour
         switch (direction)
         {
             case Direction.Forward:
-                if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance, pivotLayer))
+                if (Physics.Raycast(transform.position, Vector3.forward, out hit, CONST_MAXDISTANCE, pivotLayer))
                 {
                     Transform hitCollider = hit.collider.transform;
-                    currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z - axisDistance);
+                    currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z - CONST_AXISDISTANCE);
                 }
                 break;
             case Direction.Backward:
-                if (Physics.Raycast(transform.position, Vector3.back, out hit, maxDistance, pivotLayer))
+                if (Physics.Raycast(transform.position, Vector3.back, out hit, CONST_MAXDISTANCE, pivotLayer))
                 {
                     Transform hitCollider = hit.collider.transform;
-                    currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z + axisDistance);
+                    currentTargetPosition = new Vector3(hitCollider.position.x, hitCollider.position.y, hitCollider.position.z + CONST_AXISDISTANCE);
                 }
                 break;
             case Direction.Left:
-                if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance, pivotLayer))
+                if (Physics.Raycast(transform.position, Vector3.left, out hit, CONST_MAXDISTANCE, pivotLayer))
                 {
                     Transform hitCollider = hit.collider.transform;
-                    currentTargetPosition = new Vector3(hitCollider.position.x + axisDistance, hitCollider.position.y, hitCollider.position.z);
+                    currentTargetPosition = new Vector3(hitCollider.position.x + CONST_AXISDISTANCE, hitCollider.position.y, hitCollider.position.z);
                 }
                 break;
             case Direction.Right:
-                if (Physics.Raycast(transform.position, Vector3.right, out hit, maxDistance, pivotLayer))
+                if (Physics.Raycast(transform.position, Vector3.right, out hit, CONST_MAXDISTANCE, pivotLayer))
                 {
                     Transform hitCollider = hit.collider.transform;
-                    currentTargetPosition = new Vector3(hitCollider.position.x - axisDistance, hitCollider.position.y, hitCollider.position.z);
+                    currentTargetPosition = new Vector3(hitCollider.position.x - CONST_AXISDISTANCE, hitCollider.position.y, hitCollider.position.z);
                 }
                 break;
             default:
@@ -221,9 +234,14 @@ public class Player : MonoBehaviour
         bricks.Clear(); 
     }
 
-    void DestroyBrick(Brick brick)
+    public void DestroyBrick(Brick brick)
     {
         bricks.Remove(brick);
         Destroy(brick.gameObject);
+    }
+
+    public void FinishLevel()
+    {
+        isFinishingLevel = true;
     }
 }

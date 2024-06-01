@@ -9,8 +9,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private List<Level> levelPrefabs;
 
     private Level currentLevel;
-    private int currentLevelIndex;
     private Vector3 playerPosition;
+    private int currentLevelIndex;
 
     private static LevelManager instance;
 

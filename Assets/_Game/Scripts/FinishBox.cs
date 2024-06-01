@@ -9,6 +9,7 @@ public class FinishBox : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("finish level!!!!!!!!");
+            other.GetComponent<Player>().FinishLevel();
             UIManager.GetInstance.ShowVictoryUI();
         }
     }
