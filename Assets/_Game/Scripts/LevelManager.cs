@@ -6,8 +6,8 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private List<Level> levelPrefabs;
-    [SerializeField] private Player player;
 
+    private List<Bridge> bridges = new List<Bridge>();
     private Level currentLevel;
     private Vector3 playerPosition;
     private int currentLevelIndex;
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour
         currentLevel = Instantiate(levelPrefabs[levelIndex]);
         currentLevel.GetComponent<Transform>().position = playerPosition;
         currentLevel.gameObject.SetActive(true);
-        player.AddBrige(currentLevel.GetBridge());
+        AddBrige(currentLevel.GetBridge());
     }
 
     public void ReplayCurrentLevel()
@@ -79,5 +79,20 @@ public class LevelManager : MonoBehaviour
     public int GetCurrentLevelIndex()
     {
         return currentLevelIndex;
+    }
+
+    public void AddBrige(Bridge bridge)
+    {
+        bridges.Add(bridge);
+    }
+
+    public void AddBrickForBridge(Brick brick)
+    {
+        bridges[LevelManager.GetInstance.GetCurrentLevelIndex()].AddBrick(brick);
+    }
+
+    public bool NotEnoughBrickBridge()
+    {
+        return bridges[LevelManager.GetInstance.GetCurrentLevelIndex()].NotEnoughBrick();
     }
 }
