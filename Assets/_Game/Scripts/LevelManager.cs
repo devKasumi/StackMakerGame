@@ -6,6 +6,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private List<Level> levelPrefabs;
+    [SerializeField] private Player player;
 
     private Level currentLevel;
     private Vector3 playerPosition;
@@ -49,6 +50,7 @@ public class LevelManager : MonoBehaviour
         currentLevel = Instantiate(levelPrefabs[levelIndex]);
         currentLevel.GetComponent<Transform>().position = playerPosition;
         currentLevel.gameObject.SetActive(true);
+        player.AddBrige(currentLevel.GetBridge());
     }
 
     public void ReplayCurrentLevel()
@@ -72,5 +74,10 @@ public class LevelManager : MonoBehaviour
     {
         Destroy(currentLevel.gameObject);
         OnInit();
+    }
+
+    public int GetCurrentLevelIndex()
+    {
+        return currentLevelIndex;
     }
 }

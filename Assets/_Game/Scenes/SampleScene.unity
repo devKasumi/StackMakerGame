@@ -2017,6 +2017,7 @@ MonoBehaviour:
   - {fileID: 4628862469548601850, guid: 2daada6193b808a4b86b3f7b4a9bf717, type: 3}
   - {fileID: 1435143397553850392, guid: 8be3e667c71ec7841bd50220c2631ea1, type: 3}
   - {fileID: -7542194992841779663, guid: af3c3d32b6e9b3b4b9b5dad42465a38a, type: 3}
+  player: {fileID: 1152044069}
 --- !u!1 &1930513413
 GameObject:
   m_ObjectHideFlags: 0
@@ -2133,6 +2134,30 @@ PrefabInstance:
     - target: {fileID: 834284154111941812, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
       propertyPath: m_Name
       value: PlayerParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 834284154111941812, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4106979959668829818, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
+      propertyPath: moveSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4106979959668829818, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
+      propertyPath: bridges.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4106979959668829818, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
+      propertyPath: bridges.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4106979959668829818, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
+      propertyPath: bridges.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4106979959668829818, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
+      propertyPath: bridges.Array.data[2]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6959906323609916355, guid: 0738b6f10e55a234f82dd92db71c3649, type: 3}
       propertyPath: m_LocalRotation.w

@@ -11,13 +11,14 @@ public class Player : MonoBehaviour
     private const float CONST_MAXDISTANCE = Mathf.Infinity;
     private const int CONST_AXISDISTANCE = 2;
 
+    //[SerializeField] private Bridge bridge;
     [SerializeField] private LayerMask pivotLayer;
-    [SerializeField] private Brick brick;
     [SerializeField] private Transform player;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float originPlayerImagePos;
     [SerializeField] private float firstBrickPosition;
 
+    private List<Bridge> bridges = new List<Bridge>();
     private List<Brick> bricks = new List<Brick>();
     private Quaternion forwardRotation = Quaternion.Euler(0f, -150f, 0f);
     private Quaternion backwardRotation = Quaternion.Euler(0f, 30f, 0f);
@@ -224,14 +225,24 @@ public class Player : MonoBehaviour
 
     public void ClearBrick()
     {
+        //if (bricks.Count > 0)
+        //{
+        //    for (int i = bricks.Count - 1; i >= 0; i--)
+        //    {
+        //        DestroyBrick(bricks[i]);
+        //    }
+        //}
+        //bricks.Clear();
+        //
+
         if (bricks.Count > 0)
         {
-            for (int i = bricks.Count - 1; i >= 0; i--)
+            for (int i = 0; i < bricks.Count; i++)
             {
-                DestroyBrick(bricks[i]);
+                Destroy(bricks[i].gameObject);
             }
+            bricks.Clear();
         }
-        bricks.Clear(); 
     }
 
     public void DestroyBrick(Brick brick)
@@ -243,5 +254,20 @@ public class Player : MonoBehaviour
     public void FinishLevel()
     {
         isFinishingLevel = true;
+    }
+
+    public void AddBrige(Bridge bridge)
+    {
+        bridges.Add(bridge);
+    }
+
+    public void AddBrickForBridge(Brick brick)
+    {
+        bridges[LevelManager.GetInstance.GetCurrentLevelIndex()].AddBrick(brick); 
+    }
+
+    public bool NotEnoughBrickBridge()
+    {
+        return bridges[LevelManager.GetInstance.GetCurrentLevelIndex()].NotEnoughBrick();
     }
 }

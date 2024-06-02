@@ -21,13 +21,12 @@ public class Brick : MonoBehaviour
             Player player = other.GetComponent<Player>();
             if (isBridgeBrick)
             {
-                Bridge bridge = GameObject.FindGameObjectWithTag("BridgeBrick").GetComponent<Bridge>();
                 if (!brickMeshRenderer.enabled)
                 {
                     brickMeshRenderer.enabled = true;
                     player.RemoveBrick();
-                    bridge.AddBrick(this.gameObject.GetComponent<Brick>());
-                    if (bridge.NotEnoughBrick() && player.GetListBrickCount() == 0)
+                    player.AddBrickForBridge(this.gameObject.GetComponent<Brick>());
+                    if (player.NotEnoughBrickBridge() && player.GetListBrickCount() == 0)
                     {
                         player.StopMoving(this.gameObject.GetComponent<Brick>());
                         player.FinishLevel();
@@ -38,7 +37,7 @@ public class Brick : MonoBehaviour
             else
             {
                 player.AddBrick(this.gameObject.GetComponent<Brick>());
-            }
+            }      
         }
     }
 }

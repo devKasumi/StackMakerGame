@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        //LevelManager.GetInstance.OnDespawn();
         LevelManager.GetInstance.RestartLevel();
         UIManager.GetInstance.DisableUI();
         player.OnDespawn();

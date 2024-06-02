@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Bridge bridge;
 
-    // Update is called once per frame
-    void Update()
+    public Bridge GetBridge()
     {
-        
+        return bridge;
     }
 }

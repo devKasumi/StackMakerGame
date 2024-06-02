@@ -3711,6 +3711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9985f50304b61459e57af53d421d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bridge: {fileID: 2704054540172186425}
 --- !u!1 &3591384584321094756
 GameObject:
   m_ObjectHideFlags: 0
@@ -6494,7 +6495,7 @@ GameObject:
   - component: {fileID: 8160782817727966938}
   - component: {fileID: 2704054540172186425}
   m_Layer: 0
-  m_Name: BridgeBricks
+  m_Name: BridgeBricks_2
   m_TagString: BridgeBrick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
