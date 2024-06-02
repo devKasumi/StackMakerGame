@@ -30,6 +30,7 @@ public class Brick : MonoBehaviour
                     if (bridge.NotEnoughBrick() && player.GetListBrickCount() == 0)
                     {
                         player.StopMoving(this.gameObject.GetComponent<Brick>());
+                        player.FinishLevel();
                         UIManager.GetInstance.ShowLoseUI();
                     }
                 }

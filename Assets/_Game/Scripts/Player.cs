@@ -47,7 +47,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isFinishingLevel) return;
         ControlPlayerMovement();
     }
 
@@ -82,6 +81,7 @@ public class Player : MonoBehaviour
                 if (Vector3.Distance(transform.position, currentTargetPosition) < 0.02f)
                 {
                     Debug.Log("reach pivot position !!!");
+                    if (isFinishingLevel) return;
                 }
                 else return;
             }

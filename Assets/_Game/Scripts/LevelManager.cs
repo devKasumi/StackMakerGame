@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private Player player;
     [SerializeField] private List<Level> levelPrefabs;
 
     private Level currentLevel;
@@ -35,7 +34,7 @@ public class LevelManager : MonoBehaviour
     public void OnInit()
     {
         Debug.Log("init level manager");
-        playerPosition = player.transform.position;
+        playerPosition = Vector3.zero;
         currentLevelIndex = 0;
         InitLevel(currentLevelIndex);
     }
@@ -67,5 +66,11 @@ public class LevelManager : MonoBehaviour
     {
         Destroy(currentLevel.gameObject);
         InitLevel(currentLevelIndex);
+    }
+
+    public void RestartLevel()
+    {
+        Destroy(currentLevel.gameObject);
+        OnInit();
     }
 }
