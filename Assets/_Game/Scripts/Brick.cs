@@ -25,10 +25,10 @@ public class Brick : MonoBehaviour
                 {
                     brickMeshRenderer.enabled = true;
                     player.RemoveBrick();
-                    LevelManager.GetInstance.AddBrickForBridge(this.gameObject.GetComponent<Brick>());
+                    LevelManager.GetInstance.AddBrickForBridge(this);
                     if (LevelManager.GetInstance.NotEnoughBrickBridge() && player.GetListBrickCount() == 0)
                     {
-                        player.StopMoving(this.gameObject.GetComponent<Brick>());
+                        player.StopMoving(this);
                         player.FinishLevel();
                         UIManager.GetInstance.ShowLoseUI();
                     }
@@ -36,7 +36,7 @@ public class Brick : MonoBehaviour
             }
             else
             {
-                player.AddBrick(this.gameObject.GetComponent<Brick>());
+                player.AddBrick(this);
             }      
         }
     }
